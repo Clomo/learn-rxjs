@@ -1,6 +1,6 @@
-import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { AsyncSubject } from 'rxjs/AsyncSubject';
 
-var subject = new ReplaySubject(2);
+var subject = new AsyncSubject();
 
 subject.subscribe(
     data => addItem('Observer 1: ' + data),
@@ -22,6 +22,7 @@ subject.next('Un troisieme truc envoye');
 observer2.unsubscribe();
 
 subject.next('Un dernier truc envoye');
+subject.complete();
 
 function addItem(val: any) {
     var node = document.createElement("li");
