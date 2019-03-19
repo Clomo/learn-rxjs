@@ -1,28 +1,18 @@
-import { AsyncSubject } from 'rxjs/AsyncSubject';
+import {Observable} from "rxjs/Observable";
+import { merge } from "rxjs/observable/merge";
 
-var subject = new AsyncSubject();
+var observable = Observable.create((observer:any) => {
+    observer.next('Hello world');    
+})
 
-subject.subscribe(
-    data => addItem('Observer 1: ' + data),
-    err => addItem(err),
-    () => addItem('Observer 1 completed'),
-);
+var observable2 = Observable.create((observer:any) => {
+    observer.next('Comment ca va?');
+})
 
-subject.next('Premier truc envoye');
-subject.next('Un autre truc envoye');
-subject.next('...Observer 2 va se subscribe...');
+var newObs = merge(observable, observable2);
 
-var observer2 = subject.subscribe(
-    data => addItem('Observer 2: ' + data)
-);
+newObs.subscribe((x:any) => addItem(x));
 
-subject.next('Second truc envoye');
-subject.next('Un troisieme truc envoye');
-
-observer2.unsubscribe();
-
-subject.next('Un dernier truc envoye');
-subject.complete();
 
 function addItem(val: any) {
     var node = document.createElement("li");
